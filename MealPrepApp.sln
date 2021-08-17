@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MealPrepApp", "MealPrepApp\MealPrepApp.csproj", "{FF84B6AB-E2C8-4DAE-BA75-B6E338571CD5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MealPrepUI", "MealPrepUI\MealPrepUI.csproj", "{6CC65A30-A67D-43FD-A520-EEDA4076B0CF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FF84B6AB-E2C8-4DAE-BA75-B6E338571CD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF84B6AB-E2C8-4DAE-BA75-B6E338571CD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF84B6AB-E2C8-4DAE-BA75-B6E338571CD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF84B6AB-E2C8-4DAE-BA75-B6E338571CD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CC65A30-A67D-43FD-A520-EEDA4076B0CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CC65A30-A67D-43FD-A520-EEDA4076B0CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CC65A30-A67D-43FD-A520-EEDA4076B0CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CC65A30-A67D-43FD-A520-EEDA4076B0CF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {63B62539-FD7E-45DE-A0A0-021A616EB3B0}
+	EndGlobalSection
+EndGlobal
