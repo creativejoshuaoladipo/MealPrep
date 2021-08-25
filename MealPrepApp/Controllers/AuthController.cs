@@ -1,5 +1,6 @@
 ﻿using MealPrepApp.Data.Models.Identity;
 using MealPrepApp.DTOs;
+using MealPrepApp.Utility;
 using MealPrepApp.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Http;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace MealPrepApp.Controllers
@@ -17,9 +19,13 @@ namespace MealPrepApp.Controllers
     public class AuthController : ControllerBase
     {
         private readonly Microsoft.AspNetCore.Identity.UserManager<User> _userManager;
-        public AuthController(Microsoft.AspNetCore.Identity.UserManager<User> userManager)
+
+        public Token _token;
+
+        public AuthController(Microsoft.AspNetCore.Identity.UserManager<User> userManager, Token token )
         {
-            _userManager = userManager;         
+            _userManager = userManager;
+            _token = token;
         }
 
         [HttpPost("sign-up")]
@@ -67,7 +73,7 @@ namespace MealPrepApp.Controllers
                 {
                     Data = userDto,
                     Message = "User Created Successfully",
-                    HttpStatus = System.Net.HttpStatusCode.OK
+                    HttpStatus = HttpStatusCode.OK
 
                 }
                    );
@@ -83,10 +89,63 @@ namespace MealPrepApp.Controllers
            
         }
 
-        [HttpGet("login")]
-        public IActionResult Login()
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] SignInVM signInVM)
         {
-            return Ok();
+
+            string token;
+            string expirationTime;
+
+            try
+            {
+
+                var user = await _userManager.FindByEmailAsync(signInVM.Email);
+
+                if(user == null)
+                {
+                    return NotFound(new ResponseModel
+                    {
+
+                        Data = null,
+                        Message = "User not Found",
+                        HttpStatus = HttpStatusCode.NotFound
+
+                    });
+
+
+                }
+                else
+                {
+                    (token, expirationTime) = _token.GenerateAccessToken(user);
+                }
+ 
+                
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new ResponseModel
+                {
+                    Data = null,
+                    Message = $"Something went wrong {ex.Message}",
+                    HttpStatus = HttpStatusCode.BadRequest
+                }) ;
+            }
+
+            return Ok(new ResponseModel
+            {
+                Data = new AuthenticationResultModel
+                {
+                    AccessToken = token,
+                    ExpireInSeconds = expirationTime
+                },
+                Message = "The User was Successfully authenticated",
+                HttpStatus = HttpStatusCode.OK,
+            });
+
+
+
+
         }
     }
 }
