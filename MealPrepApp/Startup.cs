@@ -15,6 +15,10 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Identity;
 
 namespace MealPrepApp
 {
@@ -51,8 +55,23 @@ namespace MealPrepApp
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
 
-            }).AddEntityFrameworkStores<SimpleDBContext>(); //.AddDefaultTokenProvider();
+            }).AddEntityFrameworkStores<SimpleDBContext>().AddDefaultTokenProviders();
 
+
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+               .AddJwtBearer(cfg => {
+                   cfg.TokenValidationParameters = new TokenValidationParameters()
+                   {
+                       ValidateIssuer = true,
+                       ValidIssuer = Configuration["Authentication:JwtBearer:Issuer"],
+                       ValidateAudience = true,
+                       ValidAudience = Configuration["Authentication:JwtBearer:Audience"],
+                       ValidateIssuerSigningKey = true,
+                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Authentication:JwtBearer:SecretKey"]))
+                   };
+
+               });
 
 
             services.AddControllers();
