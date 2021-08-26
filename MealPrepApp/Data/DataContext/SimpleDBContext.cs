@@ -8,16 +8,18 @@ using System.Threading.Tasks;
 
 namespace MealPrepApp.Data.DataContext
 {
-    public class SimpleDBContext : IdentityDbContext<User, Role,int>
+    public class SimpleDBContext : IdentityDbContext<User, Role, int>
     {
 
-       
-        public SimpleDBContext(DbContextOptions<SimpleDBContext> dbContextOptions): base(dbContextOptions)
+
+        public SimpleDBContext(DbContextOptions<SimpleDBContext> dbContextOptions) : base(dbContextOptions)
         {
+
 
 
         }
 
+        //  public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

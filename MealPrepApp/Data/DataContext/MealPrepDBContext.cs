@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MealPrepApp.Data.Models.Domain;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,12 @@ namespace MealPrepApp.Data.DataContext
         public MealPrepDBContext(DbContextOptions<MealPrepDBContext> options): base(options)
         {
 
-
+          
         }
+
+        public DbSet<Calorie> Calories { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Meal> Meals { get; set; }
 
     }
 }

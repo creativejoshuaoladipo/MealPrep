@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MealPrepApp.Utility
 {
-    public  class Token
+    public  class Token : IToken
     {
         private readonly IConfiguration _configuration;
 

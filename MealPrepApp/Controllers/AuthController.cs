@@ -1,4 +1,5 @@
 ﻿using MealPrepApp.Data.Models.Identity;
+using Microsoft.AspNetCore.Identity;
 using MealPrepApp.DTOs;
 using MealPrepApp.Utility;
 using MealPrepApp.ViewModels;
@@ -20,9 +21,9 @@ namespace MealPrepApp.Controllers
     {
         private readonly Microsoft.AspNetCore.Identity.UserManager<User> _userManager;
 
-        public Token _token;
+        public IToken _token;
 
-        public AuthController(Microsoft.AspNetCore.Identity.UserManager<User> userManager, Token token )
+        public AuthController(Microsoft.AspNetCore.Identity.UserManager<User> userManager, IToken token )
         {
             _userManager = userManager;
             _token = token;
@@ -44,7 +45,9 @@ namespace MealPrepApp.Controllers
                     FirstName = signUpVM.FirstName,
                     LastName = signUpVM.LastName,
                     PhoneNumber = signUpVM.PhoneNumber,
-                    PhoneNumberConfirmed = true
+                    PhoneNumberConfirmed = true,
+                    UserName = signUpVM.Email,
+
                 };
 
                 var createdUser = await _userManager.CreateAsync(user, signUpVM.Password);
@@ -55,28 +58,25 @@ namespace MealPrepApp.Controllers
                     var addedUser = await _userManager.FindByNameAsync(user.UserName);
                     var userRole = await _userManager.AddToRoleAsync(addedUser, "Admin");
 
+
+                    var userDto = new UserDto
+                    {
+                        Email = user.Email,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        PhoneNumber = user.PhoneNumber
+                    };
+
+
+                    return Ok(new ResponseModel
+                    {
+                        Data = userDto,
+                        Message = "User Created Successfully",
+                        HttpStatus = HttpStatusCode.OK
+
+                    }
+                       );
                 }
-
-
-
-
-                var userDto = new UserDto
-                {
-                    Email = user.Email,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    PhoneNumber = user.PhoneNumber
-                };
-
-
-                return Ok(new ResponseModel
-                {
-                    Data = userDto,
-                    Message = "User Created Successfully",
-                    HttpStatus = HttpStatusCode.OK
-
-                }
-                   );
 
             }
 

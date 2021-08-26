@@ -4,14 +4,16 @@ using MealPrepApp.Data.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MealPrepApp.Migrations
 {
     [DbContext(typeof(SimpleDBContext))]
-    partial class SimpleDBContextModelSnapshot : ModelSnapshot
+    [Migration("20210825233814_Added")]
+    partial class Added
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,14 +53,14 @@ namespace MealPrepApp.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "066c9b45-815b-40c3-882b-bb36f4c56904",
+                            ConcurrencyStamp = "6d408428-322a-469a-88ba-a68f74094058",
                             Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "9c6bbd7e-66a4-490a-946b-25b878ea7f2e",
+                            ConcurrencyStamp = "7dacc496-b51c-4c8d-bf33-c00a0b711ad3",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -142,7 +144,7 @@ namespace MealPrepApp.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a9d45068-6835-4068-9aef-9f254db57062",
+                            ConcurrencyStamp = "a0c2c8c2-9ba4-41c4-ae40-95da0876f1a5",
                             Email = "joshuaoladipo29@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Joshua",
@@ -157,7 +159,7 @@ namespace MealPrepApp.Migrations
                         {
                             Id = 2,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "dddb4884-9b31-41bf-838e-246ffcbe0020",
+                            ConcurrencyStamp = "8987ec87-cbcc-4278-8942-ec3fbf583429",
                             Email = "joshuaoladipo29@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Femi",
