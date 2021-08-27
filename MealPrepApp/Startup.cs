@@ -20,6 +20,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 using MealPrepApp.Utility;
+using MealPrepApp.Mapper;
+using AutoMapper;
 
 namespace MealPrepApp
 {
@@ -75,6 +77,10 @@ namespace MealPrepApp
                });
 
             services.AddTransient<IToken, Token>();
+
+            IMapper mapper = MapperConfig.RegristerMapper().CreateMapper();
+            services.AddSingleton(mapper);
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
             services.AddControllers();
