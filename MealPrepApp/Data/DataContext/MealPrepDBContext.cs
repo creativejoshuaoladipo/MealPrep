@@ -18,6 +18,9 @@ namespace MealPrepApp.Data.DataContext
         public DbSet<Calorie> Calories { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Meal> Meals { get; set; }
+        public DbSet<Product> Products { get; set; }
+
+        
 
     }
 }

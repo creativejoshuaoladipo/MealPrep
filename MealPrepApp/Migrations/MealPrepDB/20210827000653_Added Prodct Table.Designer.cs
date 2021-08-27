@@ -3,14 +3,16 @@ using MealPrepApp.Data.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MealPrepApp.Migrations.MealPrepDB
 {
     [DbContext(typeof(MealPrepDBContext))]
-    partial class MealPrepDBContextModelSnapshot : ModelSnapshot
+    [Migration("20210827000653_Added Prodct Table")]
+    partial class AddedProdctTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,7 +84,7 @@ namespace MealPrepApp.Migrations.MealPrepDB
 
             modelBuilder.Entity("MealPrepApp.Data.Models.Domain.Product", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ProductId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -103,7 +105,7 @@ namespace MealPrepApp.Migrations.MealPrepDB
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.HasKey("Id");
+                    b.HasKey("ProductId");
 
                     b.ToTable("Products");
                 });
