@@ -185,7 +185,7 @@ namespace MealPrepApp.Controllers
 
                                   HttpStatus = HttpStatusCode.BadRequest,
                                   Data = null,
-                                  Message = "There is an error something"
+                                  Message = "There is an error"
                               }
                               );
             }
