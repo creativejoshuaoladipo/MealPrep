@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Identity;
 using MealPrepApp.Utility;
 using MealPrepApp.Mapper;
 using AutoMapper;
+using MealPrepApp.Repository;
 
 namespace MealPrepApp
 {
@@ -82,6 +83,7 @@ namespace MealPrepApp
             services.AddSingleton(mapper);
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+            services.AddScoped<IProductRepository, ProductRepository>();
 
             services.AddControllers();
 

@@ -66,7 +66,7 @@ namespace MealPrepApp.Repository
         public async Task<IEnumerable<ProductDto>> GetProducts()
         {
             var products = await _dbContext.Products.ToListAsync();
-           var productListDto = _map.Map<IEnumerable<ProductDto>> (products);
+            var productListDto = _map.Map<IEnumerable<ProductDto>> (products);
             return productListDto;
         }
     }
