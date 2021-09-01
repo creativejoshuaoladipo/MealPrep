@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "ER1jGm/j6PgqpoSsxRBG2CEKwl/ze/GNLgim7y2sujE24P2QXWAZrqaLlSJvKKTcmkep3jpx7XYykyoZG3L64w==",
+  "dgSpecHash": "ywR3QdiG+0qeKN5pQ2rBkG8ClJYL1MkY23e275RelBVhqnbDstvDTgQ8ogAwqSt8rUGKTeruEjYDf1sgTrTM0w==",
   "success": true,
   "projectFilePath": "C:\\Users\\USER\\source\\repos\\MealPrepApp\\MealPrep\\MealPrepUI\\MealPrepUI.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\USER\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512"
+  ],
   "logs": []
 }

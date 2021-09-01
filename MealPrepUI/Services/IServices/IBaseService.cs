@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MealPrepUI.Services.IServices
 {
-    public interface IBaseService
+    public interface IBaseService :IDisposable
     {
 
         ResponseModel responseModel { get; set; }
