@@ -8,10 +8,10 @@ namespace MealPrepUI.Services.IServices
 {
     public interface IProductService
     {
-        Task<IEnumerable<ProductDto>> GetProductsAsync();
-        Task<ProductDto> GetProductByIdAsync(int productId);
-        Task<ProductDto> CreateUpdateProductAsync(ProductDto productDto);
-        Task<bool> DeleteProductAsync(int productId);
+        Task<IEnumerable<T>> GetProductsAsync<T>();
+        Task<T> GetProductByIdAsync<T>(int productId);
+        Task<T> CreateUpdateProductAsync<T>(ProductDto productDto);
+        Task<T> DeleteProductAsync<T>(int productId);
 
     }
 }

@@ -1,3 +1,5 @@
+using MealPrepUI.Services;
+using MealPrepUI.Services.IServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -22,7 +24,13 @@ namespace MealPrepUI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            SD.ProductAPIBaseURL = Configuration["ServiceURLs: ProductAPI"];
+            services.AddHttpClient<IProductService, ProductService>();
+            services.AddSingleton<IProductService, ProductService>();
+
+
             services.AddControllersWithViews();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

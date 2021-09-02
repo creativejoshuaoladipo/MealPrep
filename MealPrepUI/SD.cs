@@ -8,7 +8,9 @@ namespace MealPrepUI
     public static class SD
     {
 
-        public static string ProductAPIURL { get; set; }
+        public static string ProductAPIBaseURL { get; set; }
+
+        public static string ProductControllerRoute { get; set; } = "api/products/";
         public enum ApiTypes 
         { 
         GET,
