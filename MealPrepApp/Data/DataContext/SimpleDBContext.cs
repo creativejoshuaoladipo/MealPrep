@@ -1,4 +1,4 @@
-﻿using MealPrepApp.MealPrepApp.Data.Model.Identity;
+﻿using MealPrepApp.Data.Models.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MealPrepApp.Data.DataContext
 {
-    public class SimpleDBContext : IdentityDbContext<User, Role, int>
+    public class SimpleDBContext : IdentityDbContext<ApplicationUser, Role, int>
     {
 
 
@@ -25,10 +25,10 @@ namespace MealPrepApp.Data.DataContext
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<User>(u =>
+            builder.Entity<ApplicationUser>(u =>
 
             {
-                u.ToTable("Users");
+                u.ToTable("ApplicationUser");
                 u.HasKey(p => p.Id);
                 u.Property(p => p.PasswordHash).HasColumnName("Password").HasColumnType("varchar(250)");
                 u.Property(p => p.PhoneNumber).HasColumnType("varchar(15)");
@@ -42,7 +42,7 @@ namespace MealPrepApp.Data.DataContext
 
             });
 
-            builder.Entity<User>().HasData(new User
+            builder.Entity<ApplicationUser>().HasData(new ApplicationUser
             {
                 Id = 1,
                 FirstName = "Joshua",
@@ -53,7 +53,7 @@ namespace MealPrepApp.Data.DataContext
             });
 
 
-            builder.Entity<User>().HasData(new User
+            builder.Entity<ApplicationUser>().HasData(new ApplicationUser
             {
                 Id = 2,
                 FirstName = "Femi",

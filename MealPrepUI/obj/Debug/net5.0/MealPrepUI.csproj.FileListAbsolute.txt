@@ -38,3 +38,4 @@ C:\Users\USER\source\repos\MealPrepApp\MealPrep\MealPrepUI\obj\Debug\net5.0\ref\
 C:\Users\USER\source\repos\MealPrepApp\MealPrep\MealPrepUI\obj\Debug\net5.0\MealPrepUI.pdb
 C:\Users\USER\source\repos\MealPrepApp\MealPrep\MealPrepUI\obj\Debug\net5.0\MealPrepUI.genruntimeconfig.cache
 C:\Users\USER\source\repos\MealPrepApp\MealPrep\MealPrepUI\obj\Debug\net5.0\MealPrepUI.csproj.CopyComplete
+C:\Users\USER\source\repos\MealPrepApp\MealPrep\MealPrepUI\bin\Debug\net5.0\Newtonsoft.Json.dll

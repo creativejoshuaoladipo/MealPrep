@@ -23,6 +23,7 @@ using MealPrepApp.Utility;
 using MealPrepApp.Mapper;
 using AutoMapper;
 using MealPrepApp.Repository;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MealPrepApp
 {
@@ -39,19 +40,37 @@ namespace MealPrepApp
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddControllers();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Meal Prep App", Version = "v1" });
+            });
+
+
             services.AddDbContext<SimpleDBContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
                     sqlOptions => sqlOptions.EnableRetryOnFailure(50));
             });
 
-            services.AddDbContext<MealPrepDBContext>(options =>
-            {
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
-                    sqlOptions => sqlOptions.EnableRetryOnFailure(50));
-            });
+            services.AddDbContext<MealPrepDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<User, Role>(options =>
+
+
+            //services.AddDbContext<SimpleDBContext>(options =>
+            //{
+            //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+            //        sqlOptions => sqlOptions.EnableRetryOnFailure(50));
+            //});
+
+            //services.AddDbContext<MealPrepDBContext>(options =>
+            //{
+            //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+            //        sqlOptions => sqlOptions.EnableRetryOnFailure(50));
+            //});
+
+            services.AddIdentity<ApplicationUser, Role>(options =>
             {
 
                 options.Password.RequireNonAlphanumeric = false;
@@ -77,6 +96,14 @@ namespace MealPrepApp
 
                });
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Administrators", new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .RequireClaim("role", "Administrators")
+                    .Build());
+            });
+
             services.AddTransient<IToken, Token>();
 
             IMapper mapper = MapperConfig.RegristerMapper().CreateMapper();
@@ -85,12 +112,7 @@ namespace MealPrepApp
 
             services.AddScoped<IProductRepository, ProductRepository>();
 
-            services.AddControllers();
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Meal Prep App", Version = "v1" });
-            });
+           
 
 
 

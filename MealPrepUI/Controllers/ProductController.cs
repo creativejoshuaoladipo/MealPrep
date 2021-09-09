@@ -1,7 +1,9 @@
-﻿using MealPrepUI.Models;
+﻿using MealPrepApp.Models;
+using MealPrepUI.Models;
 using MealPrepUI.Services.IServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,25 +13,33 @@ namespace MealPrepUI.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly IProductService _productServive;
+        private readonly IProductService _productService;
         public ProductController(IProductService productServive)
         {
-            _productServive = productServive;
+            _productService = productServive;
         }
 
         // GET: ProductController
-        public ActionResult Index()
+        public async Task<ActionResult> GetAllProducts()
         {
-            return View();
+           var apiResponse = await _productService.GetAllProductsAsync<ResponseModel>();
+
+            //Create a List to the result;
+
+            List<ProductDto> productList = new List<ProductDto>();
+
+            if(apiResponse != null )
+            {
+                //Anytime you are Deserializing an Object always remeber to add the Generic bracket<>
+                //<> is to specify the type of object you want to convert your json object to
+                productList = JsonConvert.DeserializeObject<List<ProductDto>>( Convert.ToString(apiResponse.Data));
+            }
+
+            return View(productList);
         }
 
-        // GET: ProductController/Details/5
-        public ActionResult Details(int id)
-        {
-            
-            return View();
-        }
-
+      
+        //CRUD
         // GET: ProductController/Create
         public async Task<ActionResult> CreateProduct()
         {
@@ -45,9 +55,9 @@ namespace MealPrepUI.Controllers
 
             try
             {
-                var apiProductDto = await _productServive.CreateProductAsync<ProductDto>(productDto);
+                var apiProductDto = await _productService.CreateProductAsync<ProductDto>(productDto);
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(GetAllProducts));
             }
             catch(Exception ex)
             {
@@ -56,45 +66,61 @@ namespace MealPrepUI.Controllers
         }
 
         // GET: ProductController/Edit/5
-        public ActionResult UpdateProduct(int id)
+        public async Task<ActionResult> EditProduct(int productId)
         {
-            return View();
+            var apiResponse = await _productService.GetProductByIdAsync<ResponseModel>(productId);
+
+            if(apiResponse != null)
+            {
+                ProductDto product = JsonConvert.DeserializeObject<ProductDto>(Convert.ToString(apiResponse.Data));
+                return View(product);
+            }
+
+            return NotFound();
         }
 
         // POST: ProductController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UpdateProduct(int id, IFormCollection collection)
-        {
-            try
+        public async Task<ActionResult> EditProduct(ProductDto productDto)
+        {       
+            var apiResponse = await _productService.UpdateProductAsync<ResponseModel>(productDto);
+            if (apiResponse != null)
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(GetAllProducts));
             }
-            catch
-            {
-                return View();
-            }
+
+                return View(productDto);
+           
         }
 
         // GET: ProductController/Delete/5
-        public ActionResult DeleteProduct(int id)
+        public async Task<ActionResult> DeleteProduct(int id)
         {
-            return View();
+            var apiResponse = await _productService.GetProductByIdAsync<ResponseModel>(id);
+
+            if(apiResponse != null)
+            {
+                var product = JsonConvert.DeserializeObject<ProductDto>(Convert.ToString(apiResponse.Data));
+                return View(product);
+            }
+
+            return NotFound();
         }
 
         // POST: ProductController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteProduct(int id, IFormCollection collection)
+        public async Task<ActionResult> DeleteProduct(ProductDto productDto)
         {
-            try
+            var apiResponse = await _productService.DeleteProductAsync<ResponseModel>(productDto.Id);
+
+            if (apiResponse != null)
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(GetAllProducts));
             }
-            catch
-            {
-                return View();
-            }
+
+            return NotFound();
         }
     }
 }
