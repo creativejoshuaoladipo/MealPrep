@@ -16,9 +16,9 @@ namespace MealPrepUI.Services
             _httpClient = httpClient;
         }
 
-        public async Task<IEnumerable<T>> GetProductsAsync<T>()
+        public async Task<T> GetAllProductsAsync<T>()
         {
-            return await this.SendAsync<IEnumerable<T>>(new ApiRequestModel
+            return await this.SendAsync<T>(new ApiRequestModel
             {
                 ApiType = SD.ApiTypes.GET,
                 Url = SD.ProductAPIBaseURL + SD.ProductControllerRoute
@@ -35,11 +35,25 @@ namespace MealPrepUI.Services
             });
         }
 
-        public async Task<T> CreateUpdateProductAsync<T>(ProductDto productDto)
+        public async Task<T> CreateProductAsync<T>(ProductDto productDto)
         {
             return await this.SendAsync<T>(new ApiRequestModel
             {
                 ApiType = SD.ApiTypes.POST,
+                Url = SD.ProductAPIBaseURL + SD.ProductControllerRoute,
+                Data = productDto,
+
+
+            });
+
+        }
+
+
+        public async Task<T> UpdateProductAsync<T>(ProductDto productDto)
+        {
+            return await this.SendAsync<T>(new ApiRequestModel
+            {
+                ApiType = SD.ApiTypes.PUT,
                 Url = SD.ProductAPIBaseURL + SD.ProductControllerRoute,
                 Data = productDto,
 
