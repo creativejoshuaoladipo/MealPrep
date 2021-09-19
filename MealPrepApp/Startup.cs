@@ -75,19 +75,32 @@ namespace MealPrepApp
             services.AddControllers();
 
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-               .AddJwtBearer(cfg => {
-                   cfg.TokenValidationParameters = new TokenValidationParameters()
-                   {
-                       ValidateIssuer = true,
-                       ValidIssuer = Configuration["Authentication:JwtBearer:Issuer"],
-                       ValidateAudience = true,
-                       ValidAudience = Configuration["Authentication:JwtBearer:Audience"],
-                       ValidateIssuerSigningKey = true,
-                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Authentication:JwtBearer:SecretKey"]))
-                   };
+            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            //   .AddJwtBearer(cfg => {
+            //       cfg.TokenValidationParameters = new TokenValidationParameters()
+            //       {
+            //           ValidateIssuer = true,
+            //           ValidIssuer = Configuration["Authentication:JwtBearer:Issuer"],
+            //           ValidateAudience = true,
+            //           ValidAudience = Configuration["Authentication:JwtBearer:Audience"],
+            //           ValidateIssuerSigningKey = true,
+            //           IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Authentication:JwtBearer:SecretKey"]))
+            //       };
 
-               });
+            //   });
+
+
+            services.AddAuthentication("Bearer")
+                .AddJwtBearer("Bearer", options =>
+                {
+
+                    options.Authority = "http://localhost:60516";
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = false
+                    };
+
+                });
 
 
             services.AddAuthorization(options =>
