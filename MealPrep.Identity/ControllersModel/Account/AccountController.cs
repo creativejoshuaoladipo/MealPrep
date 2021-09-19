@@ -17,6 +17,10 @@ using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
 using Duende.IdentityServer.Test;
+using MealPrep.Identity.Models;
+using Microsoft.AspNetCore.Identity;
+using MealPrep.Identity.ControllersModel.Account;
+using System.Collections.Generic;
 
 namespace IdentityServerHost.Quickstart.UI
 {
@@ -29,7 +33,10 @@ namespace IdentityServerHost.Quickstart.UI
     [AllowAnonymous]
     public class AccountController : Controller
     {
-        private readonly TestUserStore _users;
+        // private readonly TestUserStore _users;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IClientStore _clientStore;
         private readonly IAuthenticationSchemeProvider _schemeProvider;
@@ -42,16 +49,21 @@ namespace IdentityServerHost.Quickstart.UI
             IAuthenticationSchemeProvider schemeProvider,
             IIdentityProviderStore identityProviderStore,
             IEventService events,
-            TestUserStore users = null)
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            RoleManager<IdentityRole> roleManager
+            )
         {
             // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
-            _users = users ?? throw new Exception("Please call 'AddTestUsers(TestUsers.Users)' on the IIdentityServerBuilder in Startup or remove the TestUserStore from the AccountController.");
 
             _interaction = interaction;
             _clientStore = clientStore;
             _schemeProvider = schemeProvider;
             _identityProviderStore = identityProviderStore;
             _events = events;
+            _roleManager = roleManager;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         /// <summary>
@@ -111,46 +123,20 @@ namespace IdentityServerHost.Quickstart.UI
 
             if (ModelState.IsValid)
             {
-                // validate username/password against in-memory store
-                if (_users.ValidateCredentials(model.Username, model.Password))
+
+                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberLogin, lockoutOnFailure: false);
+                if (result.Succeeded)
                 {
-                    var user = _users.FindByUsername(model.Username);
-                    await _events.RaiseAsync(new UserLoginSuccessEvent(user.Username, user.SubjectId, user.Username, clientId: context?.Client.ClientId));
-
-                    // only set explicit expiration here if user chooses "remember me". 
-                    // otherwise we rely upon expiration configured in cookie middleware.
-                    AuthenticationProperties props = null;
-                    if (AccountOptions.AllowRememberLogin && model.RememberLogin)
-                    {
-                        props = new AuthenticationProperties
-                        {
-                            IsPersistent = true,
-                            ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountOptions.RememberMeLoginDuration)
-                        };
-                    };
-
-                    // issue authentication cookie with subject ID and username
-                    var isuser = new IdentityServerUser(user.SubjectId)
-                    {
-                        DisplayName = user.Username
-                    };
-
-                    await HttpContext.SignInAsync(isuser, props);
+                    var user = await _userManager.FindByNameAsync(model.Username);
+                    await _events.RaiseAsync(
+                        new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName,
+                        clientId: context?.Client.ClientId));
 
                     if (context != null)
                     {
-                        if (context.IsNativeClient())
-                        {
-                            // The client is native, so this change in how to
-                            // return the response is for better UX for the end user.
-                            return this.LoadingPage("Redirect", model.ReturnUrl);
-                        }
-
-                        // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
                         return Redirect(model.ReturnUrl);
                     }
 
-                    // request for a local page
                     if (Url.IsLocalUrl(model.ReturnUrl))
                     {
                         return Redirect(model.ReturnUrl);
@@ -161,14 +147,14 @@ namespace IdentityServerHost.Quickstart.UI
                     }
                     else
                     {
-                        // user might have clicked on a malicious link - should be logged
-                        throw new Exception("invalid return URL");
+                        throw new Exception("invalid return url");
                     }
                 }
 
-                await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials", clientId:context?.Client.ClientId));
+                await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials", clientId: context?.Client.ClientId));
                 ModelState.AddModelError(string.Empty, AccountOptions.InvalidCredentialsErrorMessage);
             }
+
 
             // something went wrong, show form with error
             var vm = await BuildLoginViewModelAsync(model);
@@ -228,11 +214,74 @@ namespace IdentityServerHost.Quickstart.UI
 
             return View("LoggedOut", vm);
         }
-
         [HttpGet]
         public IActionResult AccessDenied()
         {
             return View();
+        }
+
+
+
+        private async Task<RegisterViewModel> BuildRegisterViewModelAsync(string returnUrl)
+        {
+            var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
+            List<string> roles = new List<string>();
+            roles.Add("Admin");
+            roles.Add("Customer");
+            ViewBag.message = roles;
+            if (context?.IdP != null && await _schemeProvider.GetSchemeAsync(context.IdP) != null)
+            {
+                var local = context.IdP == Duende.IdentityServer.IdentityServerConstants.LocalIdentityProvider;
+
+                // this is meant to short circuit the UI and only trigger the one external IdP
+                var vm = new RegisterViewModel
+                {
+                    EnableLocalLogin = local,
+                    ReturnUrl = returnUrl,
+                    Username = context?.LoginHint,
+                };
+
+                if (!local)
+                {
+                    vm.ExternalProviders = new[] { new ExternalProvider { AuthenticationScheme = context.IdP } };
+                }
+
+                return vm;
+            }
+
+            var schemes = await _schemeProvider.GetAllSchemesAsync();
+
+            var providers = schemes
+                .Where(x => x.DisplayName != null)
+                .Select(x => new ExternalProvider
+                {
+                    DisplayName = x.DisplayName ?? x.Name,
+                    AuthenticationScheme = x.Name
+                }).ToList();
+
+            var allowLocal = true;
+            if (context?.Client.ClientId != null)
+            {
+                var client = await _clientStore.FindEnabledClientByIdAsync(context.Client.ClientId);
+                if (client != null)
+                {
+                    allowLocal = client.EnableLocalLogin;
+
+                    if (client.IdentityProviderRestrictions != null && client.IdentityProviderRestrictions.Any())
+                    {
+                        providers = providers.Where(provider => client.IdentityProviderRestrictions.Contains(provider.AuthenticationScheme)).ToList();
+                    }
+                }
+            }
+
+            return new RegisterViewModel
+            {
+                AllowRememberLogin = AccountOptions.AllowRememberLogin,
+                EnableLocalLogin = allowLocal && AccountOptions.AllowLocalLogin,
+                ReturnUrl = returnUrl,
+                Username = context?.LoginHint,
+                ExternalProviders = providers.ToArray()
+            };
         }
 
 
