@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MealPrepApp", "MealPrepApp\MealPrepApp.csproj", "{FF84B6AB-E2C8-4DAE-BA75-B6E338571CD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MealPrepApp", "MealPrepApp\MealPrepApp.csproj", "{FF84B6AB-E2C8-4DAE-BA75-B6E338571CD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MealPrepUI", "MealPrepUI\MealPrepUI.csproj", "{6CC65A30-A67D-43FD-A520-EEDA4076B0CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MealPrepUI", "MealPrepUI\MealPrepUI.csproj", "{6CC65A30-A67D-43FD-A520-EEDA4076B0CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MealPrep.Identity", "MealPrep.Identity\MealPrep.Identity.csproj", "{CE3FE8F4-4492-435E-A3EA-9E5C099599C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{6CC65A30-A67D-43FD-A520-EEDA4076B0CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CC65A30-A67D-43FD-A520-EEDA4076B0CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CC65A30-A67D-43FD-A520-EEDA4076B0CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE3FE8F4-4492-435E-A3EA-9E5C099599C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE3FE8F4-4492-435E-A3EA-9E5C099599C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE3FE8F4-4492-435E-A3EA-9E5C099599C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE3FE8F4-4492-435E-A3EA-9E5C099599C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -21,9 +21,4 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.12.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="MealPrepApp.Data\DataContext\" />
-    <Folder Include="MealPrepApp.Data\Model\Domain\" />
-  </ItemGroup>
-
 </Project>

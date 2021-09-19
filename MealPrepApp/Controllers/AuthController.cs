@@ -4,6 +4,7 @@ using MealPrepApp.DTOs;
 using MealPrepApp.Utility;
 using MealPrepApp.ViewModels;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

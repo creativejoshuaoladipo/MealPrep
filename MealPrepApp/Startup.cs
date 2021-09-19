@@ -23,6 +23,7 @@ using MealPrepApp.Utility;
 using MealPrepApp.Mapper;
 using AutoMapper;
 using MealPrepApp.Repository;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MealPrepApp
 {
@@ -39,6 +40,7 @@ namespace MealPrepApp
         public void ConfigureServices(IServiceCollection services)
         {
 
+         
             services.AddDbContext<SimpleDBContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
@@ -46,12 +48,12 @@ namespace MealPrepApp
             });
 
             services.AddDbContext<MealPrepDBContext>(options =>
-            {
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
-                    sqlOptions => sqlOptions.EnableRetryOnFailure(50));
-            });
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<User, Role>(options =>
+
+
+            
+            services.AddIdentity<ApplicationUser, Role>(options =>
             {
 
                 options.Password.RequireNonAlphanumeric = false;
@@ -61,6 +63,16 @@ namespace MealPrepApp
 
             }).AddEntityFrameworkStores<SimpleDBContext>().AddDefaultTokenProviders();
 
+
+            services.AddTransient<IToken, Token>();
+
+            IMapper mapper = MapperConfig.RegristerMapper().CreateMapper();
+            services.AddSingleton(mapper);
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            services.AddScoped<IProductRepository, ProductRepository>();
+
+            services.AddControllers();
 
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -77,21 +89,48 @@ namespace MealPrepApp
 
                });
 
-            services.AddTransient<IToken, Token>();
 
-            IMapper mapper = MapperConfig.RegristerMapper().CreateMapper();
-            services.AddSingleton(mapper);
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Administrators", new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .RequireClaim("role", "Administrators")
+                    .Build());
+            });
 
-            services.AddScoped<IProductRepository, ProductRepository>();
-
-            services.AddControllers();
+           
 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Meal Prep App", Version = "v1" });
-            });
+                //  c.EnableAnnotations();
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = @"Enter 'Bearer' [space] and your token",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
 
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type=ReferenceType.SecurityScheme,
+                                Id="Bearer"
+                            },
+                            Scheme="oauth2",
+                            Name="Bearer",
+                            In=ParameterLocation.Header
+                        },
+                        new List<string>()
+                    }
+
+                });
+            });
 
 
         }
