@@ -46,3 +46,4 @@ C:\Users\USER\source\repos\MealPrepApp\MealPrep\MealPrepUI\bin\Debug\net5.0\Micr
 C:\Users\USER\source\repos\MealPrepApp\MealPrep\MealPrepUI\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\USER\source\repos\MealPrepApp\MealPrep\MealPrepUI\bin\Debug\net5.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\USER\source\repos\MealPrepApp\MealPrep\MealPrepUI\bin\Debug\net5.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\USER\source\repos\MealPrepApp\MealPrep\MealPrepUI\obj\Debug\net5.0\Razor\Views\Shared\_LoginPartial.cshtml.g.cs
