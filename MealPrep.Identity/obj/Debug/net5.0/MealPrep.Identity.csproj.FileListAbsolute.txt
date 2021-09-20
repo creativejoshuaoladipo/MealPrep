@@ -407,3 +407,4 @@ C:\Users\USER\source\repos\MealPrepApp\MealPrep\MealPrep.Identity\obj\Debug\net5
 C:\Users\USER\source\repos\MealPrepApp\MealPrep\MealPrep.Identity\obj\Debug\net5.0\ref\MealPrep.Identity.dll
 C:\Users\USER\source\repos\MealPrepApp\MealPrep\MealPrep.Identity\obj\Debug\net5.0\MealPrep.Identity.pdb
 C:\Users\USER\source\repos\MealPrepApp\MealPrep\MealPrep.Identity\obj\Debug\net5.0\MealPrep.Identity.genruntimeconfig.cache
+C:\Users\USER\source\repos\MealPrepApp\MealPrep\MealPrep.Identity\obj\Debug\net5.0\Razor\Views\Account\Register.cshtml.g.cs
